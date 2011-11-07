@@ -12,7 +12,7 @@ class Spine.Manager extends Spine.Module
   add: (controllers...) ->
     @addOne(cont) for cont in controllers
     
-  addOne: (controller) ->    
+  addOne: (controller) ->
     controller.bind 'active', (args...) =>
       @trigger('change', controller, args...)
     controller.bind 'release', =>
@@ -49,7 +49,7 @@ Spine.Controller.include
     @
   
   deactivate: ->
-    @el.removeClass('active');
+    @el.removeClass('active')
     @
     
 class Spine.Stack extends Spine.Controller
@@ -64,7 +64,7 @@ class Spine.Stack extends Spine.Controller
     @manager = new Spine.Manager
 
     for key, value of @controllers
-      @[key] = new value(stack: @)
+      @[key] = new value(stack: @, el: $ '#'+key)
       @add(@[key])
 
     for key, value of @routes
