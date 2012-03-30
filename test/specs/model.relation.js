@@ -6,6 +6,29 @@ describe("Model.Relation", function(){
     Album = Spine.Model.setup("Album", ["name"]);
     Photo = Spine.Model.setup("Photo", ["name"]);
   });
+
+  it("should honour manyToMany associations", function(){
+    var Viewer = Spine.Model.setup("Viewer", ["name"]);
+    Album.manyToMany("viewers", Viewer);
+
+    var album = Album.create();
+    var album2 = Album.create();
+        
+    expect( album.viewers() ).toBeTruthy();
+    expect( album2.viewers() ).toBeTruthy();
+    expect( album.viewers().all() ).toEqual([]);
+    expect( album2.viewers().all() ).toEqual([]);
+
+    album.viewers().create({name: "First Friend"});
+    album2.viewers().add(album.viewers().first());
+
+    expect( album.viewers() ).toBeTruthy();
+    expect( album2.viewers() ).toBeTruthy();
+    expect( album.viewers().first().id ).toBe( album2.viewers().first().id );
+    expect( album.viewers().all().length ).toEqual(1);
+    expect( album2.viewers().all().length ).toEqual(1);
+
+  }); 
   
   it("should honour hasMany associations", function(){
     Album.hasMany("photos", Photo);
